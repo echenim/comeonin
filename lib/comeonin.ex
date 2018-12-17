@@ -21,16 +21,25 @@ defmodule Comeonin do
   """
   @callback check_pass(map, binary, keyword) :: {:ok, map} | {:error, String.t()}
 
+  @doc """
+  Runs the password hash function, but always returns false.
+
+  This is to help prevent user enumeration.
+  """
+  @callback no_user_verify(keyword) :: false
+
   defmacro __using__(_) do
     quote do
       @behaviour Comeonin
       @behaviour Comeonin.PasswordHash
 
+      @impl Comeonin
       def add_hash(password, opts \\ []) do
         hash_key = opts[:hash_key] || :password_hash
         %{hash_key => hash_pwd_salt(password, opts), :password => nil}
       end
 
+      @impl Comeonin
       def check_pass(user, password, opts \\ [])
 
       def check_pass(nil, _password, opts) do
@@ -55,7 +64,15 @@ defmodule Comeonin do
       defp get_hash(%{password_hash: hash}, _), do: {:ok, hash}
       defp get_hash(%{encrypted_password: hash}, _), do: {:ok, hash}
       defp get_hash(_, nil), do: nil
-      defp get_hash(user, hash_key), do: if hash = Map.get(user, hash_key), do: {:ok, hash}
+      defp get_hash(user, hash_key), do: if(hash = Map.get(user, hash_key), do: {:ok, hash})
+
+      @impl Comeonin
+      def no_user_verify(opts \\ []) do
+        hash_pwd_salt("password", opts)
+        false
+      end
+
+      defoverridable Comeonin
     end
   end
 end

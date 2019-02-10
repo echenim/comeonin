@@ -22,7 +22,8 @@ for {module, alg} <- [{Argon2, "Argon2"}, {Bcrypt, "Bcrypt"}, {Pbkdf2, "Pbkdf2"}
       option:
 
         * `:hash_key` - the name of the key for the password hash
-          * the default is `:password_hash`
+          * the default is password `:password_hash`
+          
 
       ## Example with Ecto
 

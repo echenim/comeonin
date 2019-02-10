@@ -78,5 +78,15 @@ defmodule Comeonin do
 
   Visit our [wiki](https://github.com/riverrun/comeonin/wiki)
   for links to further information about these and related issues.
+
+  
+      The following is a simple example using Phoenix 1.3:
+
+          def verify(attrs) do
+            MyApp.Accounts.get_by(attrs)
+            |> Comeonin.#{alg}.check_pass(password)
+          end
+
+      """
   """
 end

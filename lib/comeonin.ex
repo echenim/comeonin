@@ -87,6 +87,6 @@ defmodule Comeonin do
             |> Comeonin.#{alg}.check_pass(password)
           end
 
-      """
+     
   """
 end
